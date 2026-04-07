@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PINO Payment - Clean & Sharp</title>
+    <title>PINO Payment - Cosmic Fusion</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -24,47 +24,68 @@
         .card-entry { opacity: 0; animation: smoothFadeInUp 1.5s cubic-bezier(0.19, 1, 0.22, 1) forwards; animation-delay: 0.2s; }
         @keyframes smoothFadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* QR AREA - SHARP & CLEAN */
+        /* QR AREA - COSMIC FUSION */
         .qr-cosmic-container {
             position: relative;
-            width: 260px;
-            height: 260px;
+            width: 270px;
+            height: 270px;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 3rem; /* Merapikan area sekitar QR */
         }
 
-        .cosmic-border {
+        /* 1. Bingkai Lingkaran Luar (Rotating Cosmic Ring) */
+        .cosmic-ring {
             position: absolute;
             inset: 0;
             border-radius: 50%;
-            padding: 2.5px;
-            background: linear-gradient(135deg, #3b82f6, #8b5cf6, #ec4899);
+            padding: 3px;
+            background: linear-gradient(135deg, #ff0080, #7928ca, #ff0080, #0070f3, #ff0080);
+            background-size: 400% 400%;
             -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
             -webkit-mask-composite: xor;
             mask-composite: exclude;
-            box-shadow: 0 0 30px rgba(139, 92, 246, 0.4);
-            animation: borderRotate 8s linear infinite;
+            box-shadow: 0 0 35px rgba(121, 40, 202, 0.6);
+            animation: ringAnimation 10s linear infinite, glowPulse 4s infinite alternate;
         }
 
-        @keyframes borderRotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes ringAnimation { 
+            0% { transform: rotate(0deg); background-position: 0% 50%; } 
+            50% { background-position: 100% 50%; }
+            100% { transform: rotate(360deg); background-position: 0% 50%; } 
+        }
+        @keyframes glowPulse { 0% { box-shadow: 0 0 20px rgba(121, 40, 202, 0.4); } 100% { box-shadow: 0 0 50px rgba(255, 0, 128, 0.7); } }
 
+        /* 2. QR IMAGE - RAINBOW SHADOW ON PATTERN */
         #qris-img {
-            width: 210px;
-            height: 210px;
+            width: 215px;
+            height: 215px;
             object-fit: contain;
             mix-blend-mode: screen; 
-            /* Menjaga ketajaman pola hitam dan merapikan pinggiran */
-            filter: contrast(1.2) brightness(1.1) drop-shadow(0 0 5px rgba(255, 255, 255, 0.2));
-            border-radius: 12px; /* Merapikan pojok QR agar tidak terlalu tajam/patah */
+            border-radius: 12px;
+            /* EFEK KUNCI: Membuat pola QR punya border pelangi menyala */
+            filter: drop-shadow(0 0 1px #ff0080) 
+                    drop-shadow(0 0 2px #7928ca) 
+                    drop-shadow(0 0 4px #0070f3)
+                    contrast(1.2) brightness(1.1);
         }
 
-        .zap-decor { position: absolute; color: #a78bfa; filter: drop-shadow(0 0 8px #7c3aed); animation: zapZap 2s infinite; }
-        @keyframes zapZap { 0%, 100% { opacity: 0.6; transform: scale(1); } 50% { opacity: 1; transform: scale(1.15); } }
+        /* 3. ZAP DECOR - RAINBOW ZAP */
+        .zap-decor { 
+            position: absolute; 
+            filter: drop-shadow(0 0 3px #ff0080) 
+                    drop-shadow(0 0 6px #7928ca);
+            animation: zapRainbow 3s infinite, floating 4s ease-in-out infinite alternate; 
+        }
+        
+        @keyframes zapRainbow {
+            0%, 100% { color: #ff0080; opacity: 0.7; }
+            33% { color: #7928ca; opacity: 1; }
+            66% { color: #0070f3; opacity: 1; }
+        }
 
-        .float { animation: floating 4s ease-in-out infinite; }
-        @keyframes floating { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+        .float { animation: floatingArea 4s ease-in-out infinite; }
+        @keyframes floatingArea { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
 
         .hidden-menu { display: none; }
         .btn-custom { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); border: 1px solid rgba(255, 255, 255, 0.1); }
@@ -88,13 +109,14 @@
         </div>
 
         <div class="p-8">
-            <div class="flex justify-center my-6 relative">
-                <div class="qr-cosmic-container float">
-                    <div class="cosmic-border"></div>
+            <div class="flex justify-center my-6 relative float">
+                <div class="qr-cosmic-container">
+                    <div class="cosmic-ring"></div>
+                    
                     <img id="qris-img" crossorigin="anonymous" src="https://files.catbox.moe/n18w69.jpeg" alt="QRIS PINO">
                     
-                    <div class="zap-decor top-1/2 -left-8 -translate-y-1/2"><i data-lucide="zap" class="w-6 h-6"></i></div>
-                    <div class="zap-decor top-1/2 -right-8 -translate-y-1/2"><i data-lucide="zap" class="w-6 h-6"></i></div>
+                    <div class="zap-decor top-1/2 -left-8 -translate-y-1/2"><i data-lucide="zap" class="w-7 h-7"></i></div>
+                    <div class="zap-decor top-1/2 -right-8 -translate-y-1/2"><i data-lucide="zap" class="w-7 h-7"></i></div>
                 </div>
             </div>
 
@@ -104,10 +126,10 @@
             </div>
 
             <div class="space-y-4">
-                <button id="downloadBtn" onclick="handleDownload()" class="w-full py-5 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-[1.5rem] font-black text-lg uppercase tracking-widest shadow-xl shadow-indigo-500/20 flex items-center justify-center gap-3">
+                <button id="downloadBtn" onclick="handleDownload()" class="w-full py-5 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-[1.5rem] font-black text-lg uppercase tracking-widest shadow-xl shadow-indigo-500/20 flex items-center justify-center gap-3 active:scale-95 transition">
                     <i data-lucide="download" class="w-6 h-6"></i> Unduh QR Code
                 </button>
-                <button onclick="toggleMenu('info')" class="w-full py-4 border border-white/10 text-slate-300 rounded-[1.5rem] font-bold text-sm uppercase tracking-widest hover:bg-white/5 flex items-center justify-center gap-2">
+                <button onclick="toggleMenu('info')" class="w-full py-4 border border-white/10 text-slate-300 rounded-[1.5rem] font-bold text-sm uppercase tracking-widest hover:bg-white/5 flex items-center justify-center gap-2 active:scale-95 transition">
                     <i data-lucide="info" class="w-4 h-4"></i> Info Lainnya
                 </button>
             </div>
