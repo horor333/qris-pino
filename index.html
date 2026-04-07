@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PINO Payment - Galactic Edition</title>
+    <title>PINO Payment - Galactic Auto</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
     <style>
@@ -33,73 +33,92 @@
     <audio id="audioWelcome" src="LINK_AUDIO_WELCOME_DISINI"></audio>
     <audio id="audioDownload" src="LINK_AUDIO_DOWNLOAD_DISINI"></audio>
 
-    <div class="max-w-md w-full glass rounded-[2.5rem] shadow-2xl overflow-hidden animate__animated animate__fadeIn relative z-10 mx-4">
-        <div class="bg-gradient-to-r from-indigo-600 to-purple-600 p-8 text-center border-b border-white/10">
-            <h1 class="text-2xl font-black text-white tracking-widest uppercase">ALL PAYMENT PINO</h1>
-            <p class="text-indigo-200 text-[10px] font-bold tracking-[0.3em] mt-1 italic">SECURE GALACTIC GATEWAY</p>
+    <div class="max-w-md w-full glass rounded-[3rem] shadow-2xl overflow-hidden animate__animated animate__fadeIn relative z-10 mx-4">
+        <div class="bg-gradient-to-r from-indigo-600 to-purple-600 p-10 text-center border-b border-white/10">
+            <h1 class="text-3xl font-black text-white tracking-widest uppercase">PAYMENT PINO</h1>
+            <p class="text-indigo-200 text-[10px] font-bold tracking-[0.4em] mt-2 italic uppercase">Cosmic Transaction</p>
         </div>
 
         <div class="p-8">
-            <div class="text-center mb-6">
-                <p class="text-slate-400 text-xs font-bold uppercase tracking-wider">Total Tagihan</p>
-                <h2 class="text-4xl font-black text-white mt-1">Rp 150.000</h2>
-            </div>
-
-            <div class="flex justify-center my-8">
-                <div class="qr-glow float bg-white p-4 rounded-[2rem] relative">
-                    <img id="qris-img" src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=LINK_PEMBAYARAN_KAMU" class="w-48 h-48 rounded-xl">
+            <div class="flex justify-center my-6">
+                <div class="qr-glow float bg-white p-5 rounded-[2.5rem] relative">
+                    <img id="qris-img" crossorigin="anonymous" src="https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=LINK_PEMBAYARAN_KAMU" class="w-56 h-56 rounded-2xl">
                     <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
-                        <span class="bg-white px-2 py-1 rounded text-[10px] font-black text-indigo-600 shadow-md border border-slate-100">QRIS</span>
+                        <span class="bg-white px-3 py-1 rounded-lg text-xs font-black text-indigo-600 shadow-md border border-slate-100">QRIS</span>
                     </div>
                 </div>
             </div>
 
-            <div class="grid grid-cols-2 gap-3 mb-8">
-                <div class="bg-white/5 p-3 rounded-2xl border border-white/5 text-center">
-                    <p class="text-[9px] text-slate-500 font-bold uppercase">Merchant</p>
-                    <p class="text-xs font-bold text-slate-200">PINO PROJECT</p>
+            <div class="grid grid-cols-2 gap-4 mb-10">
+                <div class="bg-white/5 p-4 rounded-2xl border border-white/5 text-center">
+                    <p class="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Merchant</p>
+                    <p class="text-sm font-bold text-slate-200">PINO PROJECT</p>
                 </div>
-                <div class="bg-white/5 p-3 rounded-2xl border border-white/5 text-center">
-                    <p class="text-[9px] text-slate-500 font-bold uppercase">Status</p>
-                    <div class="flex items-center justify-center gap-1">
-                        <div class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></div>
-                        <p class="text-xs font-bold text-emerald-400 uppercase">Active</p>
+                <div class="bg-white/5 p-4 rounded-2xl border border-white/5 text-center">
+                    <p class="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Sistem</p>
+                    <div class="flex items-center justify-center gap-1.5">
+                        <div class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
+                        <p class="text-sm font-bold text-emerald-400 uppercase">Online</p>
                     </div>
                 </div>
             </div>
 
-            <button onclick="handleDownload()" class="w-full py-4 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-2xl font-black text-sm uppercase tracking-widest hover:brightness-110 active:scale-95 transition-all shadow-lg shadow-indigo-500/20">
+            <button id="downloadBtn" onclick="handleDownload()" class="w-full py-5 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-[1.5rem] font-black text-lg uppercase tracking-widest hover:brightness-110 active:scale-95 transition-all shadow-xl shadow-indigo-500/20">
                 Unduh QR Code
             </button>
-            <p class="text-center text-[10px] text-slate-500 mt-6 font-medium leading-relaxed">Klik sekali di mana saja untuk mengaktifkan suara.<br>Pastikan volume perangkat Anda menyala.</p>
+            
+            <p class="text-center text-[10px] text-slate-500 mt-8 font-medium tracking-wide">
+                Sentuh layar untuk suara sambutan.<br>QR akan langsung terunduh ke perangkat Anda.
+            </p>
         </div>
     </div>
 
     <script>
-        // --- Audio Controls ---
+        // --- Audio Logic ---
         let welcomePlayed = false;
         const welcomeAudio = document.getElementById('audioWelcome');
         const downloadAudio = document.getElementById('audioDownload');
 
         function playWelcome() {
             if (!welcomePlayed) {
-                welcomeAudio.play().catch(e => console.log("Menunggu interaksi user..."));
+                welcomeAudio.play().catch(e => console.log("User interaction required"));
                 welcomePlayed = true;
             }
         }
 
-        function handleDownload() {
-            // Play sound
+        // --- Direct Download Logic ---
+        async function handleDownload() {
+            // Play Sound
             downloadAudio.play();
             
-            // Start download logic
-            const qrUrl = document.getElementById('qris-img').src;
-            setTimeout(() => {
-                window.open(qrUrl, '_blank');
-            }, 300);
+            const btn = document.getElementById('downloadBtn');
+            const originalText = btn.innerText;
+            btn.innerText = "MENGUNDUH...";
+            
+            try {
+                const img = document.getElementById('qris-img');
+                const response = await fetch(img.src);
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = url;
+                a.download = 'QRIS-PINO-PAYMENT.png'; // Nama file hasil unduh
+                document.body.appendChild(a);
+                a.click();
+                
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+            } catch (err) {
+                console.error("Download failed, opening in new tab as fallback.");
+                window.open(document.getElementById('qris-img').src, '_blank');
+            } finally {
+                btn.innerText = originalText;
+            }
         }
 
-        // --- Background Galaxy Logic ---
+        // --- Starfield Background ---
         const canvas = document.getElementById('stars');
         const ctx = canvas.getContext('2d');
         let w, h, stars = [];
@@ -108,12 +127,12 @@
             w = window.innerWidth; h = window.innerHeight;
             canvas.width = w; canvas.height = h;
             stars = [];
-            for(let i=0; i<150; i++) stars.push({ x: Math.random()*w, y: Math.random()*h, s: Math.random()*1.5, v: Math.random()*0.5 });
+            for(let i=0; i<150; i++) stars.push({ x: Math.random()*w, y: Math.random()*h, s: Math.random()*1.5, v: Math.random()*0.4 });
         }
 
         function draw() {
             ctx.clearRect(0,0,w,h);
-            ctx.fillStyle = "#fff";
+            ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
             stars.forEach(s => {
                 ctx.beginPath(); ctx.arc(s.x, s.y, s.s, 0, Math.PI*2); ctx.fill();
                 s.y -= s.v; if(s.y < 0) s.y = h;
@@ -122,7 +141,7 @@
         }
 
         window.addEventListener('resize', setSize);
-            setSize(); draw();
+        setSize(); draw();
     </script>
 </body>
 </html>
