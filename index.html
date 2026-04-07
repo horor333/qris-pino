@@ -6,37 +6,24 @@
     <title>PINO Payment - Online Transaction</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
         body { font-family: 'Plus Jakarta Sans', sans-serif; background: #000; margin: 0; overflow: hidden; display: flex; align-items: center; justify-content: center; height: 100vh; width: 100vw; }
-        
-        /* Galaxy Background */
         #galaxy-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; background: radial-gradient(circle at center, #0a0e17 0%, #000 100%); }
         #nebula-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.5; filter: blur(100px); background: radial-gradient(circle at 20% 30%, #4f46e5 0%, transparent 40%), radial-gradient(circle at 80% 70%, #7c3aed 0%, transparent 40%); animation: pulse 15s infinite alternate; }
         @keyframes pulse { from { transform: scale(1); opacity: 0.4; } to { transform: scale(1.2); opacity: 0.6; } }
         canvas { position: fixed; top: 0; left: 0; z-index: -1; }
-
-        /* UI Styles */
         .glass { background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(25px); border: 1px solid rgba(255, 255, 255, 0.1); }
         .qr-glow { animation: qrPulse 3s infinite; }
         @keyframes qrPulse { 0%, 100% { box-shadow: 0 0 20px rgba(99, 102, 241, 0.3); } 50% { box-shadow: 0 0 50px rgba(168, 85, 247, 0.5); } }
         .float { animation: floating 4s ease-in-out infinite; }
         @keyframes floating { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
-        
         .qr-container img { width: 100%; height: 100%; object-fit: contain; border-radius: 1rem; }
         .hidden-menu { display: none; }
-
-        /* Button Hover Effects */
-        .btn-info {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
-        }
-        .btn-info:hover {
-            background: rgba(99, 102, 241, 0.2);
-            border-color: rgba(99, 102, 241, 0.5);
-            transform: translateX(5px);
-        }
+        .btn-custom { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .btn-custom:hover { transform: scale(1.02); filter: brightness(1.2); }
+        .btn-custom:active { transform: scale(0.95); filter: brightness(0.8); }
     </style>
 </head>
 <body onclick="playWelcome()">
@@ -45,8 +32,13 @@
     <div id="nebula-bg"></div>
     <canvas id="stars"></canvas>
 
-    <audio id="audioWelcome" src="LINK_AUDIO_WELCOME_DISINI"></audio>
-    <audio id="audioDownload" src="LINK_AUDIO_DOWNLOAD_DISINI"></audio>
+    <audio id="audioWelcome" src="LINK_AUDIO_WELCOME"></audio>
+    <audio id="audioDownload" src="LINK_AUDIO_DOWNLOAD"></audio>
+    <audio id="audioBtn1" src="LINK_AUDIO_TOMBOL_1"></audio>
+    <audio id="audioBtn2" src="LINK_AUDIO_TOMBOL_2"></audio>
+    <audio id="audioBtn3" src="LINK_AUDIO_TOMBOL_3"></audio>
+    <audio id="audioBtn4" src="LINK_AUDIO_TOMBOL_4"></audio>
+    <audio id="audioTransition" src="LINK_AUDIO_KLIK_MENU"></audio>
 
     <div id="main-menu" class="max-w-md w-full glass rounded-[3rem] shadow-2xl overflow-hidden animate__animated animate__fadeIn relative z-10 mx-4">
         <div class="bg-gradient-to-r from-indigo-600 to-purple-600 p-10 text-center border-b border-white/10">
@@ -64,7 +56,7 @@
             <div class="grid grid-cols-2 gap-4 mb-8">
                 <div class="bg-white/5 p-4 rounded-2xl border border-white/5 text-center">
                     <p class="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Merchant</p>
-                    <p class="text-sm font-bold text-slate-200 uppercase">Pino Project</p>
+                    <p class="text-sm font-bold text-slate-200 uppercase tracking-tighter">Pino Project</p>
                 </div>
                 <div class="bg-white/5 p-4 rounded-2xl border border-white/5 text-center">
                     <p class="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Sistem</p>
@@ -76,11 +68,13 @@
             </div>
 
             <div class="space-y-4">
-                <button id="downloadBtn" onclick="handleDownload()" class="w-full py-5 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-[1.5rem] font-black text-lg uppercase tracking-widest hover:brightness-110 active:scale-95 transition-all shadow-xl shadow-indigo-500/20">
+                <button id="downloadBtn" onclick="handleDownload()" class="w-full py-5 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-[1.5rem] font-black text-lg uppercase tracking-widest hover:brightness-110 active:scale-95 transition-all shadow-xl shadow-indigo-500/20 flex items-center justify-center gap-3">
+                    <i data-lucide="download" class="w-6 h-6"></i>
                     Unduh QR Code
                 </button>
                 
-                <button onclick="toggleMenu('info')" class="w-full py-4 border border-white/10 text-slate-300 rounded-[1.5rem] font-bold text-sm uppercase tracking-widest hover:bg-white/5 transition-all active:scale-95">
+                <button onclick="toggleMenu('info')" class="w-full py-4 border border-white/10 text-slate-300 rounded-[1.5rem] font-bold text-sm uppercase tracking-widest hover:bg-white/5 transition-all active:scale-95 flex items-center justify-center gap-2">
+                    <i data-lucide="info" class="w-4 h-4"></i>
                     Info Lainnya
                 </button>
             </div>
@@ -94,36 +88,46 @@
         </div>
 
         <div class="p-8">
-            <div class="space-y-3 mb-8">
-                <button class="w-full py-4 px-6 btn-info rounded-2xl font-bold text-slate-200 text-left flex justify-between items-center group active:scale-95">
-                    <span>1. Nomor Utama Pino</span>
-                    <span class="opacity-0 group-hover:opacity-100 transition-opacity">→</span>
+            <div class="space-y-4 mb-8">
+                <button onclick="playSound('audioBtn1')" class="w-full py-5 px-6 btn-custom bg-gradient-to-r from-blue-600 to-blue-800 rounded-2xl font-bold text-white flex items-center gap-4">
+                    <div class="bg-white/20 p-2 rounded-lg"><i data-lucide="phone" class="w-5 h-5"></i></div>
+                    <span class="text-sm">1. Nomor Utama Pino</span>
                 </button>
-                <button class="w-full py-4 px-6 btn-info rounded-2xl font-bold text-slate-200 text-left flex justify-between items-center group active:scale-95">
-                    <span>2. Nomor Cadangan</span>
-                    <span class="opacity-0 group-hover:opacity-100 transition-opacity">→</span>
+
+                <button onclick="playSound('audioBtn2')" class="w-full py-5 px-6 btn-custom bg-gradient-to-r from-indigo-600 to-indigo-800 rounded-2xl font-bold text-white flex items-center gap-4">
+                    <div class="bg-white/20 p-2 rounded-lg"><i data-lucide="shield-check" class="w-5 h-5"></i></div>
+                    <span class="text-sm">2. Nomor Cadangan</span>
                 </button>
-                <button class="w-full py-4 px-6 btn-info rounded-2xl font-bold text-slate-200 text-left flex justify-between items-center group active:scale-95">
-                    <span>3. Info Stok / Testimoni</span>
-                    <span class="opacity-0 group-hover:opacity-100 transition-opacity">→</span>
+
+                <button onclick="playSound('audioBtn3')" class="w-full py-5 px-6 btn-custom bg-gradient-to-r from-emerald-600 to-teal-800 rounded-2xl font-bold text-white flex items-center gap-4">
+                    <div class="bg-white/20 p-2 rounded-lg"><i data-lucide="star" class="w-5 h-5"></i></div>
+                    <span class="text-sm">3. Info Stok / Testimoni</span>
                 </button>
-                <button class="w-full py-4 px-6 btn-info rounded-2xl font-bold text-slate-200 text-left flex justify-between items-center group active:scale-95">
-                    <span>4. GC STOK FRESH</span>
-                    <span class="opacity-0 group-hover:opacity-100 transition-opacity">→</span>
+
+                <button onclick="playSound('audioBtn4')" class="w-full py-5 px-6 btn-custom bg-gradient-to-r from-amber-500 to-orange-700 rounded-2xl font-bold text-white flex items-center gap-4">
+                    <div class="bg-white/20 p-2 rounded-lg"><i data-lucide="users" class="w-5 h-5"></i></div>
+                    <span class="text-sm">4. GC STOK FRESH</span>
                 </button>
             </div>
 
-            <button onclick="toggleMenu('main')" class="w-full py-4 bg-white/10 text-white rounded-[1.5rem] font-black text-sm uppercase tracking-widest hover:bg-white/20 transition-all flex items-center justify-center gap-2 active:scale-95">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7" />
-                </svg>
+            <button onclick="toggleMenu('main')" class="w-full py-4 bg-white/10 text-white rounded-[1.5rem] font-black text-sm uppercase tracking-widest hover:bg-white/20 transition-all flex items-center justify-center gap-2">
+                <i data-lucide="arrow-left" class="w-4 h-4"></i>
                 Kembali ke QRIS
             </button>
         </div>
     </div>
 
     <script>
+        lucide.createIcons();
+
+        function playSound(id) {
+            const sound = document.getElementById(id);
+            sound.currentTime = 0; // Reset ke awal jika diklik cepat
+            sound.play().catch(e => console.log("Audio Error"));
+        }
+
         function toggleMenu(target) {
+            playSound('audioTransition');
             const mainMenu = document.getElementById('main-menu');
             const infoMenu = document.getElementById('info-menu');
             if(target === 'info') {
@@ -136,20 +140,17 @@
         }
 
         let welcomePlayed = false;
-        const welcomeAudio = document.getElementById('audioWelcome');
-        const downloadAudio = document.getElementById('audioDownload');
-
         function playWelcome() {
             if (!welcomePlayed) {
-                welcomeAudio.play().catch(e => {});
+                document.getElementById('audioWelcome').play().catch(e => {});
                 welcomePlayed = true;
             }
         }
 
         async function handleDownload() {
-            downloadAudio.play();
+            playSound('audioDownload');
             const btn = document.getElementById('downloadBtn');
-            btn.innerText = "MENGUNDUH...";
+            btn.innerHTML = `<span class="animate-spin mr-2">◌</span> MENGUNDUH...`;
             try {
                 const imgUrl = document.getElementById('qris-img').src;
                 const response = await fetch(imgUrl);
@@ -165,21 +166,21 @@
             } catch (err) {
                 window.open(document.getElementById('qris-img').src, '_blank');
             } finally {
-                btn.innerText = "UNDUH QR CODE";
+                btn.innerHTML = `<i data-lucide="download" class="w-6 h-6"></i> Unduh QR Code`;
+                lucide.createIcons();
             }
         }
 
+        // Star background logic tetap sama...
         const canvas = document.getElementById('stars');
         const ctx = canvas.getContext('2d');
         let w, h, stars = [];
-
         function setSize() {
             w = window.innerWidth; h = window.innerHeight;
             canvas.width = w; canvas.height = h;
             stars = [];
             for(let i=0; i<150; i++) stars.push({ x: Math.random()*w, y: Math.random()*h, s: Math.random()*1.5, v: Math.random()*0.4 });
         }
-
         function draw() {
             ctx.clearRect(0,0,w,h);
             ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
@@ -189,7 +190,6 @@
             });
             requestAnimationFrame(draw);
         }
-
         window.addEventListener('resize', setSize);
         setSize(); draw();
     </script>
