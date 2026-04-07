@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PINO Payment - Ultra Clean Edition</title>
+    <title>PINO Payment - Transparent Ultra Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -54,25 +54,56 @@
             }
         }
 
-        /* QR AREA PROFESSIONAL BORDER (BACKGROUND PUTIH DIBIARKAN AGAR RAPI) */
-        .qr-frame {
+        /* QR AREA - TRANSPARENT ULTRA PRO */
+        .qr-cosmic-container {
             position: relative;
-            background: #fff; /* Menjaga background putih QR agar tajam */
-            padding: 16px;
-            border-radius: 2rem;
-            /* Border Kaca Transparan Menyala */
-            border: 2px solid rgba(124, 58, 237, 0.3);
-            box-shadow: 0 0 20px rgba(124, 58, 237, 0.1), 
-                        inset 0 0 15px rgba(124, 58, 237, 0.05);
-            transition: all 0.5s ease;
+            width: 280px;
+            height: 280px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        
+
+        /* Bingkai Neon Lingkaran Keren */
+        .cosmic-border {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            padding: 2px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6, #ec4899);
+            -webkit-mask: 
+                linear-gradient(#fff 0 0) content-box, 
+                linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            box-shadow: 0 0 25px rgba(139, 92, 246, 0.5);
+            animation: borderRotate 10s linear infinite;
+        }
+
+        @keyframes borderRotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Gambar QR Transparan (Mix-blend mode) */
         #qris-img {
-            width: 200px; /* Ukuran pas agar rapi di frame */
-            height: 200px;
+            width: 220px;
+            height: 220px;
             object-fit: contain;
-            border-radius: 1rem;
+            /* Trik CSS: Warna putih jadi transparan di background gelap */
+            mix-blend-mode: screen; 
+            /* Memberikan efek glow lembut pada pola hitam QR */
+            filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.3));
         }
+
+        /* Hiasan Petir Neon Side */
+        .zap-decor {
+            position: absolute;
+            color: #a78bfa;
+            filter: drop-shadow(0 0 8px #7c3aed);
+            animation: zapZap 2s infinite;
+        }
+        @keyframes zapZap { 0%, 100% { opacity: 0.5; transform: scale(1); } 50% { opacity: 1; transform: scale(1.1); } }
 
         .float { animation: floating 4s ease-in-out infinite; }
         @keyframes floating { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
@@ -100,8 +131,17 @@
 
         <div class="p-8">
             <div class="flex justify-center my-6 relative">
-                <div class="qr-frame float">
+                <div class="qr-cosmic-container float">
+                    <div class="cosmic-border"></div>
+                    
                     <img id="qris-img" crossorigin="anonymous" src="https://files.catbox.moe/n18w69.jpeg" alt="QRIS PINO">
+                    
+                    <div class="zap-decor top-1/2 -left-6 -translate-y-1/2">
+                        <i data-lucide="zap" class="w-6 h-6"></i>
+                    </div>
+                    <div class="zap-decor top-1/2 -right-6 -translate-y-1/2">
+                        <i data-lucide="zap" class="w-6 h-6"></i>
+                    </div>
                 </div>
             </div>
 
