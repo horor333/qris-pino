@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PINO Payment - Premium Edition</title>
+    <title>PINO Payment - Ultra Clean Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -54,42 +54,28 @@
             }
         }
 
-        /* Transparan QR styles */
-        .qr-area {
+        /* QR AREA PROFESSIONAL BORDER (BACKGROUND PUTIH DIBIARKAN AGAR RAPI) */
+        .qr-frame {
             position: relative;
-            width: 256px;
-            height: 256px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            background: #fff; /* Menjaga background putih QR agar tajam */
+            padding: 16px;
+            border-radius: 2rem;
+            /* Border Kaca Transparan Menyala */
+            border: 2px solid rgba(124, 58, 237, 0.3);
+            box-shadow: 0 0 20px rgba(124, 58, 237, 0.1), 
+                        inset 0 0 15px rgba(124, 58, 237, 0.05);
             transition: all 0.5s ease;
         }
         
         #qris-img {
-            width: 230px;
-            height: 230px;
+            width: 200px; /* Ukuran pas agar rapi di frame */
+            height: 200px;
             object-fit: contain;
-            /* Membuat warna selain hitam menjadi transparan */
-            filter: drop-shadow(0 0 10px rgba(124, 58, 237, 0.5));
-            mix-blend-mode: screen; /* Teknik blend agar background putih hilang */
+            border-radius: 1rem;
         }
 
         .float { animation: floating 4s ease-in-out infinite; }
         @keyframes floating { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-
-        /* Neon Zap Icon */
-        .zap-icon {
-            position: absolute;
-            bottom: -10px;
-            right: -10px;
-            background: #7c3aed;
-            color: white;
-            padding: 8px;
-            border-radius: 12px;
-            box-shadow: 0 0 20px #7c3aed;
-            animation: zapPulse 2s infinite;
-        }
-        @keyframes zapPulse { 0%, 100% { box-shadow: 0 0 10px #7c3aed; transform: scale(1); } 50% { box-shadow: 0 0 25px #a78bfa; transform: scale(1.1); } }
 
         .hidden-menu { display: none; }
         .btn-custom { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); border: 1px solid rgba(255, 255, 255, 0.1); }
@@ -114,12 +100,8 @@
 
         <div class="p-8">
             <div class="flex justify-center my-6 relative">
-                <div class="qr-area float">
+                <div class="qr-frame float">
                     <img id="qris-img" crossorigin="anonymous" src="https://files.catbox.moe/n18w69.jpeg" alt="QRIS PINO">
-                    
-                    <div class="zap-icon">
-                        <i data-lucide="zap" class="w-5 h-5"></i>
-                    </div>
                 </div>
             </div>
 
