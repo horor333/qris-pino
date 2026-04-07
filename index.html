@@ -3,121 +3,126 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pembayaran QRIS Kece</title>
+    <title>PINO Payment - Galactic Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #000; margin: 0; overflow: hidden; display: flex; align-items: center; justify-content: center; height: 100vh; width: 100vw; }
         
-        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        /* Galaxy Effect */
+        #galaxy-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; background: radial-gradient(circle at center, #0a0e17 0%, #000 100%); }
+        #nebula-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.5; filter: blur(100px); background: radial-gradient(circle at 20% 30%, #4f46e5 0%, transparent 40%), radial-gradient(circle at 80% 70%, #7c3aed 0%, transparent 40%); animation: pulse 15s infinite alternate; }
+        @keyframes pulse { from { transform: scale(1); opacity: 0.4; } to { transform: scale(1.2); opacity: 0.6; } }
+        canvas { position: fixed; top: 0; left: 0; z-index: -1; }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-15px) rotate(1deg); }
-        }
-
-        @keyframes pulse-glow {
-            0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.3); }
-            50% { box-shadow: 0 0 40px rgba(59, 130, 246, 0.6); }
-        }
-
-        .float-animation { animation: float 4s ease-in-out infinite; }
-        .qr-glow { animation: pulse-glow 3s infinite; }
-        
-        .bg-mesh {
-            background-color: #f8fafc;
-            background-image: radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.15) 0, transparent 50%), 
-                              radial-gradient(at 100% 100%, rgba(124, 58, 237, 0.15) 0, transparent 50%);
-        }
-
-        .glass-card {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.4);
-        }
+        /* UI Styles */
+        .glass { background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .qr-glow { animation: qrPulse 3s infinite; }
+        @keyframes qrPulse { 0%, 100% { box-shadow: 0 0 20px rgba(99, 102, 241, 0.3); } 50% { box-shadow: 0 0 50px rgba(168, 85, 247, 0.5); } }
+        .float { animation: floating 4s ease-in-out infinite; }
+        @keyframes floating { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
     </style>
 </head>
-<body class="bg-mesh min-h-screen flex items-center justify-center p-6">
+<body onclick="playWelcome()">
 
-    <div class="max-w-md w-full glass-card rounded-[3rem] shadow-[0_32px_64px_-15px_rgba(0,0,0,0.1)] overflow-hidden animate__animated animate__zoomIn">
-        
-        <div class="bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 p-10 text-white text-center relative">
-            <div class="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
-                <svg viewBox="0 0 100 100" preserveAspectRatio="none" class="h-full w-full"><path d="M0 0 L100 100 L100 0 Z" fill="white"></path></svg>
-            </div>
-            <p class="text-blue-100 text-xs font-bold uppercase tracking-[0.2em] mb-2">Secure Payment</p>
-            <h1 class="text-3xl font-extrabold tracking-tight">QRIS Dinamis</h1>
+    <div id="galaxy-bg"></div>
+    <div id="nebula-bg"></div>
+    <canvas id="stars"></canvas>
+
+    <audio id="audioWelcome" src="LINK_AUDIO_WELCOME_DISINI"></audio>
+    <audio id="audioDownload" src="LINK_AUDIO_DOWNLOAD_DISINI"></audio>
+
+    <div class="max-w-md w-full glass rounded-[2.5rem] shadow-2xl overflow-hidden animate__animated animate__fadeIn relative z-10 mx-4">
+        <div class="bg-gradient-to-r from-indigo-600 to-purple-600 p-8 text-center border-b border-white/10">
+            <h1 class="text-2xl font-black text-white tracking-widest uppercase">ALL PAYMENT PINO</h1>
+            <p class="text-indigo-200 text-[10px] font-bold tracking-[0.3em] mt-1 italic">SECURE GALACTIC GATEWAY</p>
         </div>
 
-        <div class="px-8 pb-10 pt-8 -mt-8 bg-white rounded-t-[3rem] relative">
-            
-            <div class="text-center mb-8">
-                <span class="text-slate-400 text-sm font-medium">Total yang harus dibayar</span>
-                <div class="flex items-center justify-center gap-1 mt-1">
-                    <span class="text-xl font-bold text-slate-800 leading-none">Rp</span>
-                    <span class="text-5xl font-black text-slate-900 tracking-tight">150.000</span>
-                </div>
+        <div class="p-8">
+            <div class="text-center mb-6">
+                <p class="text-slate-400 text-xs font-bold uppercase tracking-wider">Total Tagihan</p>
+                <h2 class="text-4xl font-black text-white mt-1">Rp 150.000</h2>
             </div>
 
-            <div class="flex justify-center relative">
-                <div class="qr-glow float-animation bg-white p-5 rounded-[2.5rem] border border-slate-100 shadow-xl relative z-10">
-                    <img id="qris-image" 
-                         src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=MASUKKAN_LINK_KAMU_DISINI&margin=10" 
-                         alt="QRIS" 
-                         class="w-56 h-56 rounded-2xl">
-                    
+            <div class="flex justify-center my-8">
+                <div class="qr-glow float bg-white p-4 rounded-[2rem] relative">
+                    <img id="qris-img" src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=LINK_PEMBAYARAN_KAMU" class="w-48 h-48 rounded-xl">
                     <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
-                        <div class="bg-white p-2 rounded-xl shadow-lg border border-slate-50">
-                            <span class="text-[10px] font-black text-blue-600">QRIS</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="absolute -bottom-4 w-40 h-8 bg-slate-200/30 blur-2xl rounded-full"></div>
-            </div>
-
-            <div class="mt-10 grid grid-cols-2 gap-4">
-                <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100">
-                    <p class="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Merchant</p>
-                    <p class="text-sm font-bold text-slate-700">JOSJIS DIGITAL</p>
-                </div>
-                <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100">
-                    <p class="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Status</p>
-                    <div class="flex items-center gap-1.5">
-                        <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                        <p class="text-sm font-bold text-green-600">WAITING</p>
+                        <span class="bg-white px-2 py-1 rounded text-[10px] font-black text-indigo-600 shadow-md border border-slate-100">QRIS</span>
                     </div>
                 </div>
             </div>
 
-            <div class="mt-8 space-y-4">
-                <button onclick="downloadQR()" class="w-full py-5 bg-slate-900 text-white rounded-[1.5rem] font-bold text-lg hover:bg-blue-600 transition-all duration-300 active:scale-95 shadow-xl shadow-slate-200 flex items-center justify-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                    </svg>
-                    Simpan QR Code
-                </button>
-                <p class="text-center text-xs text-slate-400 font-medium px-4">
-                    Scan QR di atas melalui aplikasi Dana, OVO, GoPay, ShopeePay atau M-Banking Anda.
-                </p>
+            <div class="grid grid-cols-2 gap-3 mb-8">
+                <div class="bg-white/5 p-3 rounded-2xl border border-white/5 text-center">
+                    <p class="text-[9px] text-slate-500 font-bold uppercase">Merchant</p>
+                    <p class="text-xs font-bold text-slate-200">PINO PROJECT</p>
+                </div>
+                <div class="bg-white/5 p-3 rounded-2xl border border-white/5 text-center">
+                    <p class="text-[9px] text-slate-500 font-bold uppercase">Status</p>
+                    <div class="flex items-center justify-center gap-1">
+                        <div class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></div>
+                        <p class="text-xs font-bold text-emerald-400 uppercase">Active</p>
+                    </div>
+                </div>
             </div>
-        </div>
 
-        <div class="bg-slate-50/50 py-4 text-center">
-            <p class="text-[10px] font-bold text-slate-400 tracking-widest uppercase">Powered by Josjis Engine</p>
+            <button onclick="handleDownload()" class="w-full py-4 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-2xl font-black text-sm uppercase tracking-widest hover:brightness-110 active:scale-95 transition-all shadow-lg shadow-indigo-500/20">
+                Unduh QR Code
+            </button>
+            <p class="text-center text-[10px] text-slate-500 mt-6 font-medium leading-relaxed">Klik sekali di mana saja untuk mengaktifkan suara.<br>Pastikan volume perangkat Anda menyala.</p>
         </div>
     </div>
 
     <script>
-        function downloadQR() {
-            const qrUrl = document.getElementById('qris-image').src;
-            const link = document.createElement('a');
-            link.href = qrUrl;
-            link.download = 'QRIS-Pembayaran.png';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+        // --- Audio Controls ---
+        let welcomePlayed = false;
+        const welcomeAudio = document.getElementById('audioWelcome');
+        const downloadAudio = document.getElementById('audioDownload');
+
+        function playWelcome() {
+            if (!welcomePlayed) {
+                welcomeAudio.play().catch(e => console.log("Menunggu interaksi user..."));
+                welcomePlayed = true;
+            }
         }
+
+        function handleDownload() {
+            // Play sound
+            downloadAudio.play();
+            
+            // Start download logic
+            const qrUrl = document.getElementById('qris-img').src;
+            setTimeout(() => {
+                window.open(qrUrl, '_blank');
+            }, 300);
+        }
+
+        // --- Background Galaxy Logic ---
+        const canvas = document.getElementById('stars');
+        const ctx = canvas.getContext('2d');
+        let w, h, stars = [];
+
+        function setSize() {
+            w = window.innerWidth; h = window.innerHeight;
+            canvas.width = w; canvas.height = h;
+            stars = [];
+            for(let i=0; i<150; i++) stars.push({ x: Math.random()*w, y: Math.random()*h, s: Math.random()*1.5, v: Math.random()*0.5 });
+        }
+
+        function draw() {
+            ctx.clearRect(0,0,w,h);
+            ctx.fillStyle = "#fff";
+            stars.forEach(s => {
+                ctx.beginPath(); ctx.arc(s.x, s.y, s.s, 0, Math.PI*2); ctx.fill();
+                s.y -= s.v; if(s.y < 0) s.y = h;
+            });
+            requestAnimationFrame(draw);
+        }
+
+        window.addEventListener('resize', setSize);
+            setSize(); draw();
     </script>
 </body>
 </html>
