@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PINO Payment - Info Lainnya Edition</title>
+    <title>PINO Payment - High Conversion Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -15,19 +15,22 @@
         /* Galaxy Background */
         #galaxy-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; background: radial-gradient(circle at center, #0a0e17 0%, #000 100%); }
         #nebula-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.5; filter: blur(100px); background: radial-gradient(circle at 20% 30%, #4f46e5 0%, transparent 40%), radial-gradient(circle at 80% 70%, #7c3aed 0%, transparent 40%); animation: pulse 15s infinite alternate; }
-        
+        @keyframes pulse { from { transform: scale(1); opacity: 0.4; } to { transform: scale(1.2); opacity: 0.6; } }
+        canvas { position: fixed; top: 0; left: 0; z-index: -1; }
+
+        /* Container Anti-Tenggelam */
         .glass { 
             background: rgba(15, 23, 42, 0.85); 
             backdrop-filter: blur(30px); 
             border: 1px solid rgba(255, 255, 255, 0.08); 
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-            max-height: 95vh;
+            max-height: 95vh; /* Biar gak mentok atas bawah di HP kecil */
             display: flex;
             flex-direction: column;
         }
 
         .scroll-area { overflow-y: auto; padding-bottom: 20px; }
-        .scroll-area::-webkit-scrollbar { width: 0; }
+        .scroll-area::-webkit-scrollbar { width: 0; } /* Sembunyi scrollbar */
 
         /* QR AREA */
         .qr-focus-area { position: relative; width: 220px; height: 220px; display: flex; align-items: center; justify-content: center; }
@@ -36,6 +39,7 @@
             filter: drop-shadow(0 0 5px #ff0080) drop-shadow(0 0 10px #7928ca) contrast(1.2) brightness(1.2);
             animation: qrGlow 3s infinite alternate;
         }
+        @keyframes qrGlow { from { filter: drop-shadow(0 0 3px #ff0080) drop-shadow(0 0 8px #7928ca); } to { filter: drop-shadow(0 0 8px #ff0080) drop-shadow(0 0 15px #7928ca); } }
 
         /* ZAP STYLE */
         .zap-decor { position: absolute; filter: drop-shadow(0 0 5px #ff0080); animation: zapPulse 2s infinite; }
@@ -43,26 +47,27 @@
         .zap-br { bottom: -5px; right: -5px; transform: rotate(165deg); }
         @keyframes zapPulse { 0%, 100% { color: #ff0080; transform: scale(1) rotate(var(--tw-rotate)); } 50% { color: #7928ca; transform: scale(1.2) rotate(var(--tw-rotate)); } }
 
-        /* TOMBOL INFO LAINNYA (DENGAN KILATAN) */
-        .btn-info {
+        /* TOMBOL MEMIKAT (GLINT EFFECT) */
+        .btn-lure {
             position: relative;
             overflow: hidden;
             background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        .btn-info:hover { background: rgba(255, 255, 255, 0.1); border-color: rgba(255, 255, 255, 0.3); }
+        .btn-lure:hover { background: rgba(255, 255, 255, 0.1); border-color: #7928ca; box-shadow: 0 0 20px rgba(121, 40, 202, 0.3); }
         
         /* Efek Kilatan (Glint) */
-        .btn-info::after {
+        .btn-lure::after {
             content: "";
             position: absolute;
             top: -50%; left: -60%; width: 20%; height: 200%;
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.2);
             transform: rotate(30deg);
-            animation: glint 5s infinite;
+            transition: none;
+            animation: glint 4s infinite;
         }
-        @keyframes glint { 0% { left: -60%; } 15% { left: 120%; } 100% { left: 120%; } }
+        @keyframes glint { 0% { left: -60%; } 20% { left: 120%; } 100% { left: 120%; } }
 
         .float { animation: floating 4s ease-in-out infinite; }
         @keyframes floating { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
@@ -81,7 +86,7 @@
 
     <div id="main-menu" class="max-w-md w-full glass rounded-[3rem] shadow-2xl overflow-hidden card-entry relative z-10 mx-4 animate__animated animate__fadeInUp">
         <div class="bg-gradient-to-r from-indigo-950 via-slate-900 to-purple-950 p-8 text-center border-b border-white/5">
-            <h1 class="text-3xl font-black text-white tracking-widest uppercase leading-tight">PAYMENT<br>PINO</h1>
+            <h1 class="text-3xl font-black text-white tracking-widest uppercase">PAYMENT PINO</h1>
             <p class="text-indigo-400 text-[9px] font-bold tracking-[0.4em] mt-1 italic uppercase">Trusted Merchant</p>
         </div>
 
@@ -96,14 +101,14 @@
 
             <div class="grid grid-cols-2 gap-3 mb-6">
                 <div class="bg-white/5 p-3 rounded-2xl border border-white/5 text-center">
-                    <p class="text-[9px] text-slate-500 font-bold uppercase tracking-widest">Merchant</p>
+                    <p class="text-[9px] text-slate-500 font-bold uppercase">Merchant</p>
                     <p class="text-xs font-bold text-slate-200">Pino Project</p>
                 </div>
                 <div class="bg-white/5 p-3 rounded-2xl border border-white/5 text-center">
-                    <p class="text-[9px] text-slate-500 font-bold uppercase tracking-widest">Sistem</p>
+                    <p class="text-[9px] text-slate-500 font-bold uppercase">Sistem</p>
                     <div class="flex items-center justify-center gap-1.5">
-                        <div class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></div>
-                        <p class="text-xs font-bold text-emerald-400 uppercase">Online</p>
+                        <div class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
+                        <p class="text-xs font-bold text-emerald-400 uppercase">Aktif</p>
                     </div>
                 </div>
             </div>
@@ -113,8 +118,8 @@
                     <i data-lucide="download" class="w-6 h-6"></i> Simpan QRIS
                 </button>
                 
-                <button onclick="toggleMenu('info')" class="w-full py-4 btn-info text-slate-300 rounded-[1.5rem] font-bold text-xs uppercase tracking-[0.2em] flex items-center justify-center gap-2 active:scale-95 transition-all">
-                    <i data-lucide="info" class="w-4 h-4"></i> INFO LAINNYA
+                <button onclick="toggleMenu('info')" class="w-full py-4 btn-lure text-indigo-300 rounded-[1.5rem] font-bold text-xs uppercase tracking-[0.2em] flex items-center justify-center gap-2 active:scale-95">
+                    <i data-lucide="external-link" class="w-4 h-4"></i> Info Lainnya
                 </button>
             </div>
         </div>
@@ -122,28 +127,32 @@
 
     <div id="info-menu" class="hidden-menu max-w-md w-full glass rounded-[3rem] shadow-2xl overflow-hidden relative z-10 mx-4 animate__animated animate__fadeIn">
         <div class="bg-gradient-to-r from-purple-900 to-indigo-950 p-8 text-center border-b border-white/5">
-            <h2 class="text-2xl font-black text-white uppercase tracking-widest">KONTAK KAMI</h2>
+            <h2 class="text-2xl font-black text-white uppercase tracking-widest leading-none">KONTAK KAMI</h2>
             <p class="text-purple-400 text-[9px] font-bold tracking-[0.3em] mt-1 uppercase text-center italic">Siap Melayani 24/7</p>
         </div>
         <div class="scroll-area p-8 space-y-3">
-            <button onclick="openLink('https://wa.me/6285850612361')" class="w-full py-4 px-6 bg-gradient-to-r from-blue-600/20 to-blue-800/20 border border-blue-500/30 rounded-2xl font-bold text-white flex items-center gap-4 active:scale-95">
+            <button onclick="openLink('https://wa.me/6285850612361')" class="w-full py-4 px-6 bg-gradient-to-r from-blue-600/20 to-blue-800/20 border border-blue-500/30 rounded-2xl font-bold text-white flex items-center gap-4 hover:bg-blue-600/30 transition-all active:scale-95">
                 <div class="bg-blue-500/20 p-2 rounded-lg text-blue-400"><i data-lucide="message-circle" class="w-5 h-5"></i></div>
                 <div class="text-left"><p class="text-[9px] text-blue-300 uppercase opacity-70">Admin 1</p><p class="text-sm">WhatsApp Utama</p></div>
             </button>
-            <button onclick="openLink('https://wa.me/6285864518943')" class="w-full py-4 px-6 bg-gradient-to-r from-indigo-600/20 to-indigo-800/20 border border-indigo-500/30 rounded-2xl font-bold text-white flex items-center gap-4 active:scale-95">
+
+            <button onclick="openLink('https://wa.me/6285864518943')" class="w-full py-4 px-6 bg-gradient-to-r from-indigo-600/20 to-indigo-800/20 border border-indigo-500/30 rounded-2xl font-bold text-white flex items-center gap-4 hover:bg-indigo-600/30 transition-all active:scale-95">
                 <div class="bg-indigo-500/20 p-2 rounded-lg text-indigo-400"><i data-lucide="shield-check" class="w-5 h-5"></i></div>
                 <div class="text-left"><p class="text-[9px] text-indigo-300 uppercase opacity-70">Admin 2</p><p class="text-sm">WhatsApp Cadangan</p></div>
             </button>
-            <button onclick="openLink('https://whatsapp.com/channel/0029VbBX1dXHQbS9YfGl951D')" class="w-full py-4 px-6 bg-gradient-to-r from-emerald-600/20 to-emerald-800/20 border border-emerald-500/30 rounded-2xl font-bold text-white flex items-center gap-4 active:scale-95">
+
+            <button onclick="openLink('https://whatsapp.com/channel/0029VbBX1dXHQbS9YfGl951D')" class="w-full py-4 px-6 bg-gradient-to-r from-emerald-600/20 to-emerald-800/20 border border-emerald-500/30 rounded-2xl font-bold text-white flex items-center gap-4 hover:bg-emerald-600/30 transition-all active:scale-95">
                 <div class="bg-emerald-500/20 p-2 rounded-lg text-emerald-400"><i data-lucide="star" class="w-5 h-5"></i></div>
                 <div class="text-left"><p class="text-[9px] text-emerald-300 uppercase opacity-70">Official</p><p class="text-sm">Channel Testimoni</p></div>
             </button>
-            <button onclick="openLink('https://chat.whatsapp.com/CRqVTgzwoisIvg6UYLfntM')" class="w-full py-4 px-6 bg-gradient-to-r from-amber-500/20 to-orange-700/20 border border-amber-500/30 rounded-2xl font-bold text-white flex items-center gap-4 active:scale-95">
+
+            <button onclick="openLink('https://chat.whatsapp.com/CRqVTgzwoisIvg6UYLfntM')" class="w-full py-4 px-6 bg-gradient-to-r from-amber-500/20 to-orange-700/20 border border-amber-500/30 rounded-2xl font-bold text-white flex items-center gap-4 hover:bg-amber-600/30 transition-all active:scale-95">
                 <div class="bg-amber-500/20 p-2 rounded-lg text-amber-400"><i data-lucide="users" class="w-5 h-5"></i></div>
                 <div class="text-left"><p class="text-[9px] text-amber-300 uppercase opacity-70">Komunitas</p><p class="text-sm">Grup Stok Fresh</p></div>
             </button>
-            <button onclick="toggleMenu('main')" class="w-full py-4 mt-2 bg-white/5 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest flex items-center justify-center gap-2 border border-white/10 active:scale-95 transition-all">
-                <i data-lucide="arrow-left" class="w-4 h-4"></i> Kembali
+
+            <button onclick="toggleMenu('main')" class="w-full py-4 mt-2 bg-white/5 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest flex items-center justify-center gap-2 border border-white/10 active:scale-95 transition-all hover:bg-white/10">
+                <i data-lucide="arrow-left" class="w-4 h-4"></i> Kembali ke Pembayaran
             </button>
         </div>
     </div>
@@ -154,12 +163,14 @@
         let wPlay = false; function playWelcome() { if (!wPlay) { document.getElementById('audioWelcome').play().catch(e => {}); wPlay = true; } }
         function openLink(u) { playClick(); setTimeout(() => { window.open(u, '_blank'); }, 150); }
         function toggleMenu(t) { playClick(); const m = document.getElementById('main-menu'); const i = document.getElementById('info-menu'); if(t === 'info') { m.classList.add('hidden-menu'); i.classList.remove('hidden-menu'); } else { i.classList.add('hidden-menu'); m.classList.remove('hidden-menu'); } }
+        
         async function handleDownload() {
-            playClick(); const b = document.getElementById('downloadBtn'); b.innerHTML = `MENGUNDUH...`;
+            playClick(); const b = document.getElementById('downloadBtn'); b.innerHTML = `<span class="animate-spin mr-2">◌</span>...`;
             try { const img = document.getElementById('qris-img').src; const r = await fetch(img); const bl = await r.blob(); const u = window.URL.createObjectURL(bl); const a = document.createElement('a'); a.href = u; a.download = 'QRIS-PINO.jpeg'; document.body.appendChild(a); a.click(); window.URL.revokeObjectURL(u); document.body.removeChild(a); } 
             catch (e) { window.open(document.getElementById('qris-img').src, '_blank'); } 
             finally { b.innerHTML = `<i data-lucide="download" class="w-6 h-6"></i> Simpan QRIS`; lucide.createIcons(); }
         }
+
         const canvas = document.getElementById('stars'); const ctx = canvas.getContext('2d'); let w, h, stars = [];
         function setSize() { w = window.innerWidth; h = window.innerHeight; canvas.width = w; canvas.height = h; stars = []; for(let i=0; i<150; i++) stars.push({ x: Math.random()*w, y: Math.random()*h, s: Math.random()*1.5, v: Math.random()*0.4 }); }
         function draw() { ctx.clearRect(0,0,w,h); ctx.fillStyle = "rgba(255, 255, 255, 0.8)"; stars.forEach(s => { ctx.beginPath(); ctx.arc(s.x, s.y, s.s, 0, Math.PI*2); ctx.fill(); s.y -= s.v; if(s.y < 0) s.y = h; }); requestAnimationFrame(draw); }
