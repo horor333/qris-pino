@@ -42,7 +42,7 @@
         <div class="p-8">
             <div class="flex justify-center my-6">
                 <div class="qr-glow float bg-white p-5 rounded-[2.5rem] relative">
-                    <img id="qris-img" crossorigin="anonymous" src="https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=LINK_PEMBAYARAN_KAMU" class="w-56 h-56 rounded-2xl">
+                    <img id="qris-img" crossorigin="anonymous" src="https://files.catbox.moe/n18w69.jpeg" class="w-56 h-56 rounded-2xl object-cover">
                     <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
                         <span class="bg-white px-3 py-1 rounded-lg text-xs font-black text-indigo-600 shadow-md border border-slate-100">QRIS</span>
                     </div>
@@ -86,35 +86,34 @@
             }
         }
 
-        // --- Direct Download Logic ---
+        // --- Direct Download Logic (FIXED FOR CATBOX) ---
         async function handleDownload() {
             // Play Sound
             downloadAudio.play();
             
             const btn = document.getElementById('downloadBtn');
-            const originalText = btn.innerText;
             btn.innerText = "MENGUNDUH...";
             
             try {
-                const img = document.getElementById('qris-img');
-                const response = await fetch(img.src);
+                const imgUrl = document.getElementById('qris-img').src;
+                const response = await fetch(imgUrl);
                 const blob = await response.blob();
                 const url = window.URL.createObjectURL(blob);
                 
                 const a = document.createElement('a');
-                a.style.display = 'none';
                 a.href = url;
-                a.download = 'QRIS-PINO-PAYMENT.png'; // Nama file hasil unduh
+                a.download = 'QRIS-PINO-PAYMENT.jpeg';
                 document.body.appendChild(a);
                 a.click();
                 
                 window.URL.revokeObjectURL(url);
                 document.body.removeChild(a);
             } catch (err) {
-                console.error("Download failed, opening in new tab as fallback.");
-                window.open(document.getElementById('qris-img').src, '_blank');
+                // Fallback jika fetch diblokir CORS
+                const imgUrl = document.getElementById('qris-img').src;
+                window.open(imgUrl, '_blank');
             } finally {
-                btn.innerText = originalText;
+                btn.innerText = "UNDUH QR CODE";
             }
         }
 
